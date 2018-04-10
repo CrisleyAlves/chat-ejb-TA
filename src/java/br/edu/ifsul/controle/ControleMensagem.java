@@ -10,6 +10,7 @@ import br.edu.ifsul.modelo.Mensagem;
 import br.edu.ifsul.modelo.Usuario;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
@@ -90,15 +91,13 @@ public class ControleMensagem implements Serializable{
         this.usuario = new Usuario();
     }
     
-    private int number;
- 
-    public int getNumber() {
-        return number;
-    }
- 
-    public void increment() {
-        System.out.println("chamou");
-        number++;
+    /*
+        Eu não sei o porquê, mas se pegasse o valor direto pelo Bean não estava dando certo, ele não conseguia
+    encontrar o método que retornava as mensagens que esta dentro do Bean de mensagens.
+        Com essa função tu já retorna as mensagens sem acessar diretamente o Bean, daí deu certo.
+    */
+    public List<Mensagem> atualizaMensagens(){
+        return beanMensagem.getMensagens();
     }
     
     

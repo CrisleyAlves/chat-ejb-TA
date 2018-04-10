@@ -46,23 +46,28 @@
                    <c:if test="#{controleMensagem.usuario.nomeUsuario != null}">
                        <h:panelGroup>
 
-                        <b:dataTable 
+                        <b:dataTable
                                     value="#{controleMensagem.beanMensagem.mensagens}"
                                     info="false"
                                     responsive="true"
                                     id="dataTableConversa"
                                     searching="false"
-                                    var="obj" paginated="false">
+                                    var="obj" paginated="false"
+                                    ajax="true"
+                                    >
                             <b:dataTableColumn value="#{obj.mensagem}" 
                                                orderable="false"/>
                        </b:dataTable>
                         
-                           
-                           
-                        <p:outputLabel id="teste" value="#{controleMensagem.number}" />
-                        <p:poll interval="1"
-                                listener="#{controleMensagem.increment}" 
-                                update="teste"/>
+                        
+                          <!--
+                            update -> Infomar o ID do Datatable das mensagens;
+                            interval -> intervalo de segundos que ocorre a sincronização
+                            listener -> ele vai "escutar" as modificações que ocorrerem nesta função
+                          -->                           
+                        <p:poll interval="5"
+                                listener="#{controleMensagem.atualizaMensagens}" 
+                                update="dataTableConversa"/>
                         
 
                         <c:if test="#{controleMensagem.usuario.nomeUsuario != null}">
