@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:b="http://bootsfaces.net/ui">
+    
+    
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">Chat</ui:define>
+        <ui:define name="conteudo">
+
+               <h:form id="formListagem">
+                   
+                    <b:dataTable 
+                                 value="#{controleMensagem.beanMensagem.usuarios}"
+                                 info="false"
+                                 searching="false"
+                                 var="obj" paginated="false">
+                        <b:dataTableColumn>
+                            <p:outputLabel value="#{obj.nomeUsuario}" />
+                        </b:dataTableColumn>
+                    </b:dataTable>
+                   
+                   <p:column headerText="NOME">
+                       <p:outputLabel>Usuários online: </p:outputLabel>
+                       <p:outputLabel value="#{controleMensagem.beanMensagem.usuarios.size()}" />
+                    </p:column>
+
+                   <c:if test="#{controleMensagem.usuario.nomeUsuario == null}">
+                        <h:form id="formInserir">
+                            <br />
+                            <p:outputLabel value="Usuário"/>
+                            <b:inputText placeholder="Nome de Usuário" value="#{controleMensagem.usuario.nomeUsuario}" />
+                                <b:commandButton icon="ui-icon-pencil" 
+                                                 actionListener="#{controleMensagem.entrarChat()}"
+                                                 value="Logar"
+                                                 update=":formListagem"/>
+
+                        </h:form>
+                    </c:if>
+                   
+                   <c:if test="#{controleMensagem.usuario.nomeUsuario != null}">
+                       <h:panelGroup>
+
+                        <b:dataTable 
+                                    value="#{controleMensagem.beanMensagem.mensagens}"
+                                    info="false"
+                                    responsive="true"
+                                    id="dataTableConversa"
+                                    searching="false"
+                                    var="obj" paginated="false">
+                            <b:dataTableColumn value="#{obj.mensagem}" 
+                                               orderable="false"/>
+                       </b:dataTable>
+                        
+                           
+                           
+                        <p:outputLabel id="teste" value="#{controleMensagem.number}" />
+                        <p:poll interval="1"
+                                listener="#{controleMensagem.increment}" 
+                                update="teste"/>
+                        
+
+                        <c:if test="#{controleMensagem.usuario.nomeUsuario != null}">
+
+                            <p:outputLabel value="Mensagem"/>
+
+                            <b:inputText id="txtMensagem" placeholder="Mensagem" value="#{controleMensagem.mensagem.mensagem}" />
+
+                            <p:column headerText="AÇÕES">
+                                    <b:commandButton class="btn btn-default"
+                                                     actionListener="#{controleMensagem.adicionaMensagem()}"
+                                                     value="Enviar"
+                                                     update="formListagem" />
+
+                                    <b:commandButton class="btn btn-danger"
+                                                     icon="ui-icon-pencil" 
+                                                     actionListener="#{controleMensagem.sairChat()}"
+                                                     value="Sair"
+                                                     update="formListagem" />
+                            </p:column>
+                        </c:if>
+                           
+                        </h:panelGroup>
+                   </c:if>
+
+                    
+                </h:form>
+
+
+        </ui:define>
+    </ui:composition>
+</html>
+
